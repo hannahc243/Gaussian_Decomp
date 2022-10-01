@@ -26,3 +26,5 @@ popt, pcov, gaus_params, fit_para, fit, resid = gaussians_fit(np.asarray(df['tim
 
 gaussian_decomp(np.asarray(df['time']), np.asarray(df['counts']), x_inv, mean_prediction_inv, std_inv, fit, fit_para)
 
+
+"test"
