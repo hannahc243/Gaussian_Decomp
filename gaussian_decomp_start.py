@@ -1,6 +1,6 @@
-from GP_regression import *
-from Gaussian_fit import *
-from Figures import *
+from gp_regression import *
+from gaussian_fit import *
+from figures import *
 import numpy as np
 import json
 import pickle

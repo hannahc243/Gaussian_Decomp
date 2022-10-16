@@ -2,7 +2,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 from scipy.stats import spearmanr, pearsonr
 import matplotlib.pyplot as plt
-from GP_regression import *
+from gp_regression import *
 
 def peak_finder(mean_prediction,x_inv):
 	grad = np.gradient(mean_prediction.reshape(-1))
@@ -40,7 +40,6 @@ def guess_fn(peak_time,peak_vals,width_time):
 	    guess.append(peak_vals[i])  
 	    guess.append(width_time.reshape(-1)[i]/2.355)
 	return guess
-
 
 def gaussian(x, *params):
     y = np.zeros_like(x)
