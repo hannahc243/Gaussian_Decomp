@@ -61,7 +61,7 @@ def analyse_series(time, counts, yerr, alpha, ker_amplitude, length_scale, time_
 
 	popt, pcov, gaus_params, fit_para, fit, resid = gaussians_fit(time,counts, guess, bounds_lower, bounds_upper)
 
-	resid_std = gaussian_decomp(time, counts, x_inv, mean_prediction_inv, std_inv, fit, fit_para, resid, yerr, time_format)
+	resid_std = gaussian_decomp_plot(time, counts, x_inv, mean_prediction_inv, std_inv, fit, fit_para, resid, yerr, time_format)
 	
 	slope, intersect, spear, pearsonr = line_fit(popt, x_inv)
 

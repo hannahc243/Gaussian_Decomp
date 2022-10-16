@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
 
-df = pd.read_csv('/Users/hannahcollier/Documents/solo/data/QPPS/040522/040522_data.csv')
+df = pd.read_csv('040522_data.csv')
 
 
 params = {"alpha": np.arange(0.001,0.015,0.001), 
