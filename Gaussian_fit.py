@@ -10,21 +10,14 @@ def peak_finder(mean_prediction,x_inv):
 	idx = np.argwhere(np.diff(np.sign(grad - y)))
 	val = [mean_prediction[i] for i in idx.reshape(-1)]
 	if val[0] > val[1]:
-		#print('deleted one')
 		idx = np.insert(idx,0,0)
 		val = np.insert(val,0,mean_prediction[0])
 		
 	if val[-1] < val[-2]:
-		#print('added one')
 		idx = np.delete(idx, -1, 0)
 		val = np.delete(val, -1, 0)
 
 	time_idx = [x_inv[i] for i in idx]
-	# if len(time_idx)%2 != 0:
-	# 	print(len(time_idx)%2)
-	# 	plt.plot(x_inv, mean_prediction)
-	# 	plt.plot(time_idx, [1 for i in range(len(time_idx))],'x')
-	# 	plt.show()
 
 	idx_every_second = idx[1::2] 
 	base_time = np.asarray(time_idx[::2])
