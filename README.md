@@ -6,4 +6,4 @@ Reference Paper: Collier et al 2022/23 (in prep) \
 Corresponding Author: Hannah Collier, Fachhochschule Nordwestschweiz & ETH Zürich. E-mail: hannah.collier@fhnw.ch \
 Authors: Hannah Collier, Laura A. Hayes, Andrea Francesco Battaglia, Louise Harra, Säm Krucker. \
 \
-This repository is under developed. Any bugs found and other contributions are welcome!
+This repository is under developed. If you find any bugs please le me know and all other contributions are welcome!
