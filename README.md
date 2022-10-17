@@ -1,4 +1,4 @@
-## Gaussian Decomposition (Gaussian_Decomp)
+## Gaussian Decomposition of the Hard X-ray Time Profiles of Solar Flares (Gaussian_Decomp)
 
 This repository is for analysing fast time variations in the Hard X-ray Emission from Solar Flares. It decomposes the signal into individual Gaussian bursts. 
 
