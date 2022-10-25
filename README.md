@@ -4,6 +4,6 @@ This repository is for analysing fast time variations in the Hard X-ray Emission
 
 Reference Paper: Collier et al 2022/23 (in prep) \
 Corresponding Author: Hannah Collier, Fachhochschule Nordwestschweiz & ETH Zürich. E-mail: hannah.collier@fhnw.ch \
-Authors: Hannah Collier, Laura A. Hayes, Andrea Francesco Battaglia, Louise Harra, Säm Krucker. \
+Authors: Hannah Collier, Laura A. Hayes, Andrea F. Battaglia, Louise K. Harra, Säm Krucker. \
 \
 This repository is under developed. All contributions are welcome!
