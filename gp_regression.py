@@ -1,7 +1,6 @@
-from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import cross_val_score, GridSearchCV
 from sklearn.gaussian_process import GaussianProcessRegressor
-from sklearn.gaussian_process.kernels import RBF, ConstantKernel, WhiteKernel
+from sklearn.gaussian_process.kernels import RBF, ConstantKernel
 from sklearn import preprocessing
 import numpy as np
 

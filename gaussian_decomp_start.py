@@ -1,9 +1,12 @@
-from gp_regression import *
-from gaussian_fit import *
-from figures import *
+from gp_regression import rescale, grid_search, train_set, gp_fit 
+from gaussian_fit import peak_finder, guess_fn, bounds, gaussians_fit, line_fit 
+from figures import gaussian_decomp_plot, line_plot
 import numpy as np
 import json
 import pickle
+import datetime
+import os
+
 
 
 def hyperparam_opt(time, counts, params):
@@ -15,12 +18,10 @@ def hyperparam_opt(time, counts, params):
         an array of times
     counts : ndarray
         an array of data points can be counts or count rate
-    parans : dictionary
+    params : dictionary
     	a dictionary of the range of kernel hyperparameters to search over.
 	"""
 	X_scaled, y_scaled, scaler_x, scaler_y = rescale(time, counts)
-	plt.plot(X_scaled,y_scaled)
-	plt.show()
 
 	grid = grid_search(X_scaled,y_scaled, params)
 	return grid.best_score_, grid.best_params_

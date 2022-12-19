@@ -2,7 +2,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 from scipy.stats import spearmanr, pearsonr
 import matplotlib.pyplot as plt
-from gp_regression import *
+#from gp_regression import *
 
 def peak_finder(mean_prediction,x_inv):
 	grad = np.gradient(mean_prediction.reshape(-1))
@@ -12,14 +12,15 @@ def peak_finder(mean_prediction,x_inv):
 	if val[0] > val[1]:
 		idx = np.insert(idx,0,0)
 		val = np.insert(val,0,mean_prediction[0])
-		
+
 	if val[-1] < val[-2]:
 		idx = np.delete(idx, -1, 0)
 		val = np.delete(val, -1, 0)
 
-	time_idx = [x_inv[i] for i in idx]
+	time_idx = [x_inv[i].reshape(-1) for i in idx]
 
 	idx_every_second = idx[1::2] 
+
 	base_time = np.asarray(time_idx[::2])
 	peak_time = np.asarray(time_idx[1::2])
 	width_time = peak_time-base_time #in s
@@ -44,6 +45,7 @@ def gaussian(x, *params):
     return y
 
 
+#messed around these bound values, need to choose them carefully
 def bounds(peak_time, peak_vals, width_time, guess):
 	bounds_lower=[]
 	bounds_upper=[]
@@ -56,10 +58,9 @@ def bounds(peak_time, peak_vals, width_time, guess):
 		bounds_upper.append(width_time[i]+20)
 	return bounds_lower, bounds_upper
 
-
 def gaussians_fit(time, counts, guess, bounds_lower=None, bounds_upper=None):
 	if bounds_lower is not None:
-		popt, pcov = curve_fit(gaussian, time.reshape(-1), counts.reshape(-1), p0=guess,bounds=((bounds_lower),(bounds_upper)),
+		popt, pcov = curve_fit(gaussian, time.reshape(-1), counts.reshape(-1), p0=guess, bounds=((bounds_lower),(bounds_upper)),
 	                       maxfev=60000) 
 	else:
 		popt, pcov = curve_fit(gaussian, time.reshape(-1), counts.reshape(-1), p0=guess,
@@ -73,10 +74,8 @@ def gaussians_fit(time, counts, guess, bounds_lower=None, bounds_upper=None):
 	for i in range(int(len(popt)/3)):
 	    fit_para[i] = gaussian(time, *gaus_params[i,:]).reshape(-1)
 	    
-	#print(gaus_params)
 	fit = gaussian(time, *popt)
 	resid = fit - counts
-
 	return popt, pcov, gaus_params, fit_para, fit, resid
 
 

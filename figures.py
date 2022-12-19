@@ -6,6 +6,23 @@ import datetime
 import os
 
 def line_plot(means,x_inv, a, b, description=None, savedir = None):
+	"""Function which creates and saves line plots
+	Parameters
+    ----------
+
+    means : ndarray
+        an array of Gaussian mean times
+    x_inv : ndarray
+        an array of time values corresponding to predicted curve
+    a : scalar
+    	scalar value of slope of line fit
+    b : scaler
+    	scaler value of line fit y intersect
+   	description : string, optional
+    	name to call file saves
+    savedir : string, optional
+   		directory to save plots to
+	"""
 	peak_no = np.arange(1,len(means)+1)
 	means_edit = means - x_inv[0]
 
@@ -34,6 +51,35 @@ def line_plot(means,x_inv, a, b, description=None, savedir = None):
 
 
 def gaussian_decomp_plot(time, counts, x_inv, mean_prediction_inv, std_inv, fit, fit_para, resid, yerr, time_earth_format = None, savedir=None, description=None):
+	"""Function which creates and saves Gaussian decomposition
+	Parameters
+    ----------
+	time : ndarray
+	        an array of times
+    counts : ndarray
+        an array of data points, can be counts or count rate
+    x_inv :  ndarray 
+    	an array of time values corresponding to predicted curve
+    mean_prediction_inv : ndarray
+    	an array of predicted counts values, from gp regression
+    std_inv : ndarray
+    	an array of predicted curve standard deviation values
+    fit : ndarray
+    	an array of linear combination of Gaussians fit
+    fit_para : ndarray	
+    	an array of values of each Gaussian fitted
+	resid : ndarray
+		an array of residual values (the difference between fit and measured counts array)	
+    yerr : ndarray
+    	an array of error values of measured counts (incl. compression and counting error)
+    time_earth_format : pandas series datetime object, optional
+	    	a pandas series datetime object of the time array (in Earth time if preferable)    
+   	description : string, optional
+    	name to call file saves
+    savedir : string, optional
+   		directory to save plots to
+	"""
+
 	fig=plt.figure(figsize=[12,8], constrained_layout=False)
 	outer_grid = fig.add_gridspec(1, 1, hspace=0.3, wspace=0.2)
 
@@ -47,7 +93,7 @@ def gaussian_decomp_plot(time, counts, x_inv, mean_prediction_inv, std_inv, fit,
 	else:
 		time_arr = time_earth_format
 
-	fig0.errorbar(time_arr, counts, yerr=yerr, label='STIX 25-76 keV',zorder=0)
+	fig0.errorbar(time_arr, counts, yerr=yerr, label='STIX 22-76 keV',zorder=0)
 #	fig0.plot(time_arr, mean_prediction_inv.reshape(-1), label='Mean prediction',zorder=1)
 
 	fig0.plot(time_arr, fit, label='Linear combination of Gaussians', linewidth='3', zorder=3)
@@ -60,8 +106,8 @@ def gaussian_decomp_plot(time, counts, x_inv, mean_prediction_inv, std_inv, fit,
 	fig1.plot(time_arr, [0 for i in range(len(time_arr))], linewidth='3')
 	fig1.set_ylabel('Residual', fontsize='xx-large')
 	fig1.set_ylim(-6,6)
-	fig1.xaxis.set_major_formatter(DateFormatter("%H:%M:%S"))
-	fig0.xaxis.set_major_formatter(DateFormatter("%H:%M:%S"))
+	#fig1.xaxis.set_major_formatter(DateFormatter("%H:%M:%S"))
+	#fig0.xaxis.set_major_formatter(DateFormatter("%H:%M:%S"))
 	fig0.tick_params(labelsize='xx-large')
 	fig1.tick_params(labelsize='xx-large')
 
