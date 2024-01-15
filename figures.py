@@ -50,7 +50,7 @@ def line_plot(means,x_inv, a, b, description=None, savedir = None):
 	return peak_no, a, b, means_edit
 
 
-def gaussian_decomp_plot(time, counts, x_inv, mean_prediction_inv, std_inv, fit, fit_para, resid, yerr, time_earth_format = None, savedir=None, description=None):
+def gaussian_decomp_plot(time, counts, x_inv, mean_prediction_inv, fit, fit_para, resid, yerr, time_earth_format = None, savedir=None, description=None):
 	"""Function which creates and saves Gaussian decomposition
 	Parameters
     ----------
@@ -62,8 +62,8 @@ def gaussian_decomp_plot(time, counts, x_inv, mean_prediction_inv, std_inv, fit,
     	an array of time values corresponding to predicted curve
     mean_prediction_inv : ndarray
     	an array of predicted counts values, from gp regression
-    std_inv : ndarray
-    	an array of predicted curve standard deviation values
+    # std_inv : ndarray
+    # 	an array of predicted curve standard deviation values ## can be removed?
     fit : ndarray
     	an array of linear combination of Gaussians fit
     fit_para : ndarray	

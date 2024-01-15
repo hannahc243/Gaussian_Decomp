@@ -2,11 +2,10 @@ from gp_regression import rescale, grid_search, train_set, gp_fit
 from gaussian_fit import peak_finder, guess_fn, bounds, gaussians_fit, line_fit 
 from figures import gaussian_decomp_plot, line_plot
 import numpy as np
-import json
 import pickle
 import datetime
 import os
-
+from scipy.signal import savgol_filter
 
 
 def hyperparam_opt(time, counts, params):
@@ -27,7 +26,7 @@ def hyperparam_opt(time, counts, params):
 	return grid.best_score_, grid.best_params_
 
 
-def analyse_series(time, counts, yerr, alpha, ker_amplitude, length_scale, time_format=None):
+def analyse_series(time, counts, yerr, window_length, polyorder, time_format = None): 
 	"""Analyse a single, generic timeseries using the Gaussian decomposition method.
 	    
 	    Parameters
@@ -49,12 +48,10 @@ def analyse_series(time, counts, yerr, alpha, ker_amplitude, length_scale, time_
 	    	a pandas series datetime object of the time array     
 	"""	
 
-	X_scaled, y_scaled, scaler_x, scaler_y = rescale(time, counts)
+	x_inv = time
+	mean_prediction_inv = savgol_filter(counts, window_length, polyorder) ## changed to savgol filtering here, instead of gp regression, for simplicity
 
-	X_train, y_train = train_set(X_scaled,y_scaled) #X_scaled, y_scaled 
-	x_inv, mean_prediction_inv, std_inv = gp_fit(X_train, y_train, scaler_x, scaler_y, X_scaled, alpha, ker_amplitude, length_scale) 
-
-	peak_time,peak_vals,width_time = peak_finder(mean_prediction_inv, x_inv) 
+	peak_time,peak_vals,width_time = peak_finder(mean_prediction_inv, time) 
 
 	guess = np.asarray(guess_fn(peak_time,peak_vals,width_time))
 
@@ -62,13 +59,13 @@ def analyse_series(time, counts, yerr, alpha, ker_amplitude, length_scale, time_
 
 	popt, pcov, gaus_params, fit_para, fit, resid = gaussians_fit(time,counts, guess, bounds_lower, bounds_upper)
 
-	resid_std = gaussian_decomp_plot(time, counts, x_inv, mean_prediction_inv, std_inv, fit, fit_para, resid, yerr, time_format)
+	resid_std = gaussian_decomp_plot(time, counts, x_inv, mean_prediction_inv, fit, fit_para, resid, yerr, time_format)
 	
 	slope, intersect, spear, pearsonr = line_fit(popt, x_inv)
 
 	line_plot(popt[::3], x_inv, slope, intersect)
 
-	save_run(time, counts, yerr, alpha, ker_amplitude, length_scale, resid, resid_std, slope, gaus_params, fit_para, fit, time_format=time_format)
+	save_run(time, counts, yerr, resid, resid_std, slope, gaus_params, fit_para, fit, time_format=time_format)
 
 	print(f'Analysis summary \n----------------- \n Number of Gaussians Fit: {len(popt)/3} \n Slope of Line Fit: {np.round(slope,1)} s \n Pearson correlation coefficient, pvalue: {np.round(pearsonr[0],3)}, {pearsonr[1]} \n Residual std: {np.round(resid_std,2)}' )	
 
@@ -143,7 +140,7 @@ def error_analysis(time, counts, yerr, alpha, ker_amplitude, length_scale, time_
 	return 
 
 
-def save_run(time, counts, yerr, alpha, ker_amplitude, length_scale, resid, resid_std, slope, gaus_params, fit_para, fit, time_format=None, description=None, savedir=None):
+def save_run(time, counts, yerr, resid, resid_std, slope, gaus_params, fit_para, fit, time_format=None, description=None, savedir=None):
 	"""Save parameters of run to pickle file
 	Parameters
     ----------
@@ -174,12 +171,10 @@ def save_run(time, counts, yerr, alpha, ker_amplitude, length_scale, resid, resi
    		directory to save plots to
 	"""
 	if time_format is not None:
-		save_dict = {'time':time, 'counts':counts, 'yerr':yerr, 'alpha':alpha, 'ker_amplitude':ker_amplitude,
-		'length_scale':length_scale, 'resid':resid, 'resid_std': resid_std, 'time_format':time_format, 'slope':slope, 'gaus_params':gaus_params, 'fit_para':fit_para, 'fit':fit}
+		save_dict = {'time':time, 'counts':counts, 'yerr':yerr, 'resid':resid, 'resid_std': resid_std, 'time_format':time_format, 'slope':slope, 'gaus_params':gaus_params, 'fit_para':fit_para, 'fit':fit}
 
 	else:
-		save_dict = {'time':time, 'counts':counts, 'yerr':yerr, 'alpha':alpha, 'ker_amplitude':ker_amplitude,
-		'length_scale':length_scale, 'resid':resid}
+		save_dict = {'time':time, 'counts':counts, 'yerr':yerr, 'resid':resid}
 
 	if not description:
 		description = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')

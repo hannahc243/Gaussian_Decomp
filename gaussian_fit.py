@@ -12,10 +12,11 @@ def peak_finder(mean_prediction,x_inv):
 	if val[0] > val[1]:
 		idx = np.insert(idx,0,0)
 		val = np.insert(val,0,mean_prediction[0])
+		idx_every_second = idx[1::2]
 
 	if val[-1] < val[-2]:
-		idx = np.delete(idx, -1, 0)
-		val = np.delete(val, -1, 0)
+		idx = np.delete(idx, -1)
+		val = np.delete(val, -1)
 
 	time_idx = [x_inv[i].reshape(-1) for i in idx]
 
