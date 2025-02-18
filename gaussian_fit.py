@@ -6,16 +6,27 @@ import matplotlib.pyplot as plt
 
 def peak_finder(mean_prediction,x_inv):
 	grad = np.gradient(mean_prediction.reshape(-1))
-	y = [0 for i in range(len(mean_prediction))]
+	y = [0 for _ in range(len(mean_prediction))]
 	idx = np.argwhere(np.diff(np.sign(grad - y)))
 	val = [mean_prediction[i] for i in idx.reshape(-1)]
+		
+	remove_first = False
+	remove_last = False
+	
 	if val[0] > val[1]:
-		idx = np.insert(idx,0,0)
-		val = np.insert(val,0,mean_prediction[0])
-
+		remove_first = True
+	
 	if val[-1] < val[-2]:
-		idx = np.delete(idx, -1, 0)
-		val = np.delete(val, -1, 0)
+		remove_last = True
+	
+	# Apply the modifications after checking conditions
+	if remove_first:
+		idx = idx[1:]  # Remove the first element
+		val = val[1:]  # Remove the first value
+	
+	if remove_last:
+ 		idx = idx[:-1]  # Remove the last element
+ 		val = val[:-1]  # Remove the last value
 
 	time_idx = [x_inv[i].reshape(-1) for i in idx]
 
@@ -23,6 +34,7 @@ def peak_finder(mean_prediction,x_inv):
 
 	base_time = np.asarray(time_idx[::2])
 	peak_time = np.asarray(time_idx[1::2])
+
 	width_time = peak_time-base_time #in s
 	peak_vals = np.asarray([mean_prediction[i] for i in idx_every_second]).reshape(-1)
 	return peak_time, peak_vals, width_time
